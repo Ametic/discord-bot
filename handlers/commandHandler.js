@@ -3,20 +3,26 @@ const path = require('path');
 
 function loadCommands(client) {
     const commandsPath = path.join(__dirname, '../commands');
-    const commandFiles = fs.readdirSync(commandsPath);
+    function loadFromDir(directory) {
+        const items = fs.readdirSync(directory, { withFileTypes: true });
 
-    for (const file of commandFiles) {
-        if (!file.endsWith('.js')) continue;
-
-        const command = require(`../commands/${file}`);
-
-        if (command.data && command.execute) {
-            client.commands.set(command.data.name, command);
-            console.log(`Załadowano komendę: ${command.data.name}`);
-        } else {
-            console.warn(`Komenda ${file} nie ma data lub execute`);
+        for (const item of items ) {
+            const itemPath = path.join(directory, item.name);
+            if (item.isDirectory()) {
+                loadFromDir(itemPath);
+            } else if (item.name.endsWith('.js')) {
+                const command = require(itemPath);
+                if (command.data && command.execute) {
+                    client.commands.set(command.data.name, command);
+                    console.log(`Załadowano komendę: ${command.data.name}`);
+                } else {
+                    console.warn(`Komenda ${item.name} nie ma data lub execute`);
+                }
+            }
         }
     }
+
+    loadFromDir(commandsPath);
 }
 
 module.exports = { loadCommands };

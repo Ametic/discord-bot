@@ -7,7 +7,8 @@ const { loadEvents } = require('./handlers/eventHandler');
 
 const client = new Client({
     intents: [
-        GatewayIntentBits.Guilds
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers
     ]
 });
 
