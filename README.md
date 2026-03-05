@@ -5,6 +5,7 @@ My first ever Discord bot written in discord.js v14.
 ### Features:
 
 - `/cat` command to send random cat picture from API.
+- `/ping` command to show Bot/Discord API latency.
 
 ### To-Do list
 
